@@ -41,8 +41,12 @@ public class ChessBoard {
 			
 			List<Position> threatens = piece.threatens(this);
 			available.removeAll(threatens);
+			
+			if (!threatens.isEmpty() && pieces.keySet().containsAll(threatens)) {
+				throw new RuntimeException("There is threatened pieces " + position);
+			}
 		} else {
-			throw new RuntimeException("There is no position available");
+			throw new RuntimeException("There is no available positions");
 		}
 	}
 
