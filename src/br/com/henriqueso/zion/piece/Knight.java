@@ -14,42 +14,42 @@ public class Knight extends ChessPiece {
 		
 		Position newPosition = null;
 		
-		newPosition = downRight(1, 2);
+		newPosition = bottomRight(1, 2);
 		if (chessBoard.isValidPosition(newPosition)) {
 			threatened.add(newPosition);
 		}
 		
-		newPosition = downRight(2, 1);
+		newPosition = bottomRight(2, 1);
 		if (chessBoard.isValidPosition(newPosition)) {
 			threatened.add(newPosition);
 		}
 		
-		newPosition = downLeft(1, 2);
+		newPosition = bottomLeft(1, 2);
 		if (chessBoard.isValidPosition(newPosition)) {
 			threatened.add(newPosition);
 		}
 		
-		newPosition = downLeft(2, 1);
+		newPosition = bottomLeft(2, 1);
 		if (chessBoard.isValidPosition(newPosition)) {
 			threatened.add(newPosition);
 		}
 		
-		newPosition = upRight(1, 2);
+		newPosition = topRight(1, 2);
 		if (chessBoard.isValidPosition(newPosition)) {
 			threatened.add(newPosition);
 		}
 		
-		newPosition = upRight(2, 1);
+		newPosition = topRight(2, 1);
 		if (chessBoard.isValidPosition(newPosition)) {
 			threatened.add(newPosition);
 		}
 		
-		newPosition = upLeft(1, 2);
+		newPosition = topLeft(1, 2);
 		if (chessBoard.isValidPosition(newPosition)) {
 			threatened.add(newPosition);
 		}
 		
-		newPosition = upLeft(2, 1);
+		newPosition = topLeft(2, 1);
 		if (chessBoard.isValidPosition(newPosition)) {
 			threatened.add(newPosition);
 		}
@@ -57,28 +57,28 @@ public class Knight extends ChessPiece {
 		return threatened;
 	}
 
-	private Position downLeft(int down, int left) {
+	private Position bottomLeft(int down, int left) {
 		int threatenedX = getPosition().getX() + down;
 		int threatenedY = getPosition().getY() - left;
 
 		return new Position(threatenedX, threatenedY);
 	}
 
-	private Position downRight(int down, int right) {
+	private Position bottomRight(int down, int right) {
 		int threatenedX = getPosition().getX() + down;
 		int threatenedY = getPosition().getY() + right;
 		
 		return new Position(threatenedX, threatenedY);
 	}
 	
-	private Position upLeft(int up, int left) {
+	private Position topLeft(int up, int left) {
 		int threatenedX = getPosition().getX() - up;
 		int threatenedY = getPosition().getY() - left;
 		
 		return new Position(threatenedX, threatenedY);
 	}
 	
-	private Position upRight(int up, int right) {
+	private Position topRight(int up, int right) {
 		int threatenedX = getPosition().getX() - up;
 		int threatenedY = getPosition().getY() + right;
 		
