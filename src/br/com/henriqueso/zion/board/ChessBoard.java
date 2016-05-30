@@ -1,19 +1,26 @@
 package br.com.henriqueso.zion.board;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import br.com.henriqueso.zion.piece.ChessPiece;
 
 public class ChessBoard {
 
-	private List<Position> available;
+	private Set<Position> available;
+	private Map<Position, ChessPiece> pieces;
 	private int rows;
 	private int columns;
 
-	public ChessBoard(int rows, int columns) {
+	public ChessBoard(final int rows, final int columns) {
 		this.rows = rows;
 		this.columns = columns;
 		
-		available = new ArrayList<>();
+		available = new HashSet<>();
+		pieces = new HashMap<>();
 		
 		for (int row = 0; row < rows; row++) {
 			
@@ -23,6 +30,22 @@ public class ChessBoard {
 		}
 	}
 	
+	public void put(final ChessPiece piece) {
+		Position position = getAvailablePosition();
+		
+		if (position != null) {
+			pieces.put(position, piece);
+			available.remove(position);
+			
+			piece.setPosition(position);
+			
+			List<Position> threatens = piece.threatens(this);
+			available.removeAll(threatens);
+		} else {
+			throw new RuntimeException("There is no position available");
+		}
+	}
+
 	public int getRows() {
 		return this.rows;
 	}
@@ -42,20 +65,39 @@ public class ChessBoard {
 	public String toString() {
 		StringBuffer sBuffer = new StringBuffer();
 		
-		sBuffer.append("|");
-		
-		int row = 0;
-		for (Position position : available) {
+		for (int row = 0; row < rows; row++) {
+			sBuffer.append("\n|");
 			
-			if (position.getX() != row) {
-				sBuffer.append("\n|");
-				row = position.getX();
+			for (int column = 0; column < columns; column++) {
+				
+				Position position = new Position(row, column);
+				
+				ChessPiece piece = pieces.get(position);
+				
+				if (piece != null) {
+					sBuffer.append(" " + piece.toString() + " ");
+					
+				} else if(available.contains(position)) {
+					sBuffer.append(position);
+					
+				} else {
+					sBuffer.append("   ");
+				}
+				
+				sBuffer.append("|");
 			}
-			sBuffer.append(position.toString());
-			sBuffer.append("|");
 		}
 		
 		return sBuffer.toString();
 	}
 
+	private Position getAvailablePosition() {
+		Position position = null;
+		
+		if (!available.isEmpty()) {
+			position = available.iterator().next();
+		}
+		
+		return position;
+	}
 }
