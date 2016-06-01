@@ -14,7 +14,7 @@ import br.com.henriqueso.zion.piece.Knight;
 public class KnightTest {
 	
 	@Test
-	public void testThreatensKightOn_0_0() {
+	public void testThreatensKnightOn_0_0() {
 		/**
 		 * GIVEN a 3x3 ChessBoard
 		 *   AND Knight on position 0,0
