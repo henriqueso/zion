@@ -23,6 +23,13 @@ public class King extends ChessPiece {
 		
 		return threatened;
 	}
+	
+
+
+	@Override
+	public Integer getThreatLevel() {
+		return Integer.valueOf(3);
+	}
 
 	private void north(final ChessBoard chessBoard, final List<Position> threatened) {
 		int threatenedX = getPosition().getX() - 1;

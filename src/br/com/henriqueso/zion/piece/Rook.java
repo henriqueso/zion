@@ -17,4 +17,9 @@ public class Rook extends ChessPiece {
 	public String toString() {
 		return "R";
 	}
+
+	@Override
+	public Integer getThreatLevel() {
+		return Integer.valueOf(4);
+	}
 }

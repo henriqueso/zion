@@ -1,5 +1,6 @@
 package br.com.henriqueso.zion.board;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,23 +31,26 @@ public class ChessBoard {
 		}
 	}
 	
-	public void put(final ChessPiece piece) {
-		Position position = getAvailablePosition();
+	public void put(final ChessPiece piece, final Position position) {
 		
 		if (position != null) {
-			pieces.put(position, piece);
+			piece.setPosition(position);
+			List<Position> threatens = piece.threatens(this);
+			
 			available.remove(position);
 			
-			piece.setPosition(position);
-			
-			List<Position> threatens = piece.threatens(this);
+			checkCurrentPositions(threatens);
+
 			available.removeAll(threatens);
+			pieces.put(position, piece);
 			
-			if (!threatens.isEmpty() && pieces.keySet().containsAll(threatens)) {
-				throw new RuntimeException("There is threatened pieces " + position);
-			}
 		} else {
 			throw new RuntimeException("There is no available positions");
+		}
+	}
+	private void checkCurrentPositions(final List<Position> threatens) {
+		if (!pieces.isEmpty() && !Collections.disjoint(threatens, pieces.keySet())) {
+			throw new RuntimeException("There are threatened positions");
 		}
 	}
 
@@ -95,13 +99,7 @@ public class ChessBoard {
 		return sBuffer.toString();
 	}
 
-	private Position getAvailablePosition() {
-		Position position = null;
-		
-		if (!available.isEmpty()) {
-			position = available.iterator().next();
-		}
-		
-		return position;
+	public Set<Position> getAvailablePositions() {
+		return Collections.unmodifiableSet(available);
 	}
 }

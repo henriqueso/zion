@@ -18,5 +18,6 @@ public abstract class ChessPiece {
 	}
 	
 	public abstract List<Position> threatens(ChessBoard chessBoard);
+	public abstract Integer getThreatLevel();
 
 }

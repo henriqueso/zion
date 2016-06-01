@@ -17,4 +17,9 @@ public class Queen extends ChessPiece {
 	public String toString() {
 		return "Q";
 	}
+
+	@Override
+	public Integer getThreatLevel() {
+		return Integer.valueOf(5);
+	}
 }

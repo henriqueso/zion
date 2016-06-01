@@ -17,4 +17,9 @@ public class Bishop extends ChessPiece {
 	public String toString() {
 		return "B";
 	}
+
+	@Override
+	public Integer getThreatLevel() {
+		return Integer.valueOf(4);
+	}
 }

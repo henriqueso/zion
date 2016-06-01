@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import br.com.henriqueso.zion.piece.King;
 import br.com.henriqueso.zion.piece.Knight;
 
 public class ChessBoardTest {
@@ -34,12 +35,8 @@ public class ChessBoardTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3, 3);
 		try {
-			chessBoard.put(new Knight());
-			chessBoard.put(new Knight());
-			chessBoard.put(new Knight());
-			chessBoard.put(new Knight());
-			chessBoard.put(new Knight());
-			chessBoard.put(new Knight());
+			chessBoard.put(new King(), new Position(1,1));
+			chessBoard.put(new Knight(), new Position(2,1));
 		} catch (RuntimeException rex) {
 			assertEquals("There is no available positions", rex.getMessage());
 		}

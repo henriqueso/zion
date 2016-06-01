@@ -57,6 +57,11 @@ public class Knight extends ChessPiece {
 		return threatened;
 	}
 
+	@Override
+	public Integer getThreatLevel() {
+		return Integer.valueOf(2);
+	}
+
 	private Position bottomLeft(int down, int left) {
 		int threatenedX = getPosition().getX() + down;
 		int threatenedY = getPosition().getY() - left;
