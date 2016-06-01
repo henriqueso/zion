@@ -9,6 +9,7 @@ public class Queen extends ChessPiece {
 
 	@Override
 	public List<Position> threatens(ChessBoard chessBoard) {
+		// TODO: Implement how Queen attacks
 		return null;
 	}
 

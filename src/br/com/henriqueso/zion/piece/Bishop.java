@@ -9,6 +9,7 @@ public class Bishop extends ChessPiece {
 
 	@Override
 	public List<Position> threatens(ChessBoard chessBoard) {
+		// TODO: Implement how bishop attacks
 		return null;
 	}
 
