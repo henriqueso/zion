@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import br.com.henriqueso.zion.exceptions.NoAvailablePositionException;
 import br.com.henriqueso.zion.piece.King;
 import br.com.henriqueso.zion.piece.Knight;
 
@@ -28,18 +29,15 @@ public class ChessBoardTest {
 		assertTrue(valid);
 	}
 	
-	@Test
+	@Test(expected = NoAvailablePositionException.class)
 	public void testPutPieceWhenNoAvailablePositions() {
 		/**
 		 * GIVEN a 3x3 ChessBoard
 		 */
 		ChessBoard chessBoard = new ChessBoard(3, 3);
-		try {
-			chessBoard.put(new King(), new Position(1,1));
-			chessBoard.put(new Knight(), new Position(2,1));
-		} catch (RuntimeException rex) {
-			assertEquals("There is no available positions", rex.getMessage());
-		}
+		
+		chessBoard.put(new King(), new Position(1,1));
+		chessBoard.put(new Knight(), new Position(2,1));
 	}
 
 }

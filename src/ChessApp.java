@@ -1,16 +1,29 @@
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import br.com.henriqueso.zion.board.ChessBoard;
 import br.com.henriqueso.zion.board.Position;
+import br.com.henriqueso.zion.exceptions.NoAvailablePositionException;
+import br.com.henriqueso.zion.exceptions.ThreatenedPieceException;
 import br.com.henriqueso.zion.piece.ChessPiece;
 import br.com.henriqueso.zion.piece.ChessPieceComparator;
 import br.com.henriqueso.zion.piece.King;
 import br.com.henriqueso.zion.piece.Knight;
 
-public class ChessApp {
+public class ChessApp implements Runnable {
+
+	private List<ChessPiece> pieces;
+	private Position firstPosition;
+	private ChessBoard board;
+
+
+	public ChessApp(List<ChessPiece> pieces, Position position, ChessBoard board) {
+		this.pieces = pieces;
+		this.firstPosition = position;
+		this.board = board;
+	}
+
 
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
@@ -18,17 +31,19 @@ public class ChessApp {
 		int rows = 3;
 		int columns = 3;
 		
-		ChessApp app = new ChessApp();
-		
-		List<ChessPiece> pieces = Arrays.asList(new King(), new Knight(), new Knight());
-		
-		ChessBoard board = new ChessBoard(rows, columns);
+		for (int row = 0; row < rows; row++) {
+			
+			for (int column = 0; column < columns; column++) {
+				List<ChessPiece> pieces = Arrays.asList(new King(), new Knight(), new Knight());
+				
+				Collections.sort(pieces, new ChessPieceComparator());
+				
+				Position initialPosition = new Position(row, column);
+				ChessApp app = new ChessApp(pieces, initialPosition, new ChessBoard(rows, columns));
 
-		Position position = new Position(0, 0);
-		
-		Collections.sort(pieces, new ChessPieceComparator());
-		
-		app.addPieces(pieces, position, board);
+				new Thread(app, initialPosition.toString()).start();
+			}
+		}
 		
 		long end = System.currentTimeMillis();
 		System.out.println("Took " + (end - start) + " milliseconds.");
@@ -40,26 +55,23 @@ public class ChessApp {
 			Position piecePosition = position;
 			for (ChessPiece piece : pieces) {
 				addPiece(piece, piecePosition, board);
-				piecePosition = board.getAvailablePositions().iterator().next();
+				
+				if (board.getAvailablePositions().iterator().hasNext()) {
+					piecePosition = board.getAvailablePositions().iterator().next();
+				} else {
+					throw new NoAvailablePositionException();
+				}
 			}
 			
-			System.out.println(board);
+			System.out.println(Thread.currentThread().getName() + board);
 			System.out.println("-----------------");
+		
+		} catch (NoAvailablePositionException | ThreatenedPieceException bex) {
+//			System.out.println(Thread.currentThread().getName() + " not possible");
+			
 		} catch (RuntimeException rex) {
-			System.out.println(rex.getMessage());
+			rex.printStackTrace();
 			
-			Position newPosition = null;
-			if (position.getY() + 1 < board.getColumns()) {
-				newPosition = new Position(position.getX(), position.getY() + 1);
-			} else {
-				newPosition = new Position(position.getX() + 1, 0);
-			}
-			
-			if (board.isValidPosition(newPosition)) {
-				addPieces(pieces, newPosition, new ChessBoard(board.getRows(), board.getColumns()));
-			} else {
-				System.out.println("Not possible");
-			}
 		}
 		
 	}
@@ -68,20 +80,26 @@ public class ChessApp {
 	private void addPiece(ChessPiece piece, Position position, ChessBoard board) {
 		try {
 
-			System.out.println(piece + " on " + position);
 			board.put(piece, position);
 			
-		} catch (RuntimeException rex) {
+		} catch (ThreatenedPieceException rex) {
 			
 			if ( board.getAvailablePositions().iterator().hasNext() ) {
 				Position next = board.getAvailablePositions().iterator().next();
 			
 				addPiece(piece, next, board);
 			} else {
-				throw new RuntimeException("new board");
+				throw rex;
 			}
 		}
 		
+		
+	}
+
+
+	@Override
+	public void run() {
+		addPieces(pieces, firstPosition, board);
 		
 	}
 

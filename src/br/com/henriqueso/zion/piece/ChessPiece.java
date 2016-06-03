@@ -13,7 +13,7 @@ public abstract class ChessPiece {
 		return position;
 	}
 
-	public void setPosition(Position position) {
+	public synchronized void setPosition(Position position) {
 		this.position = position;
 	}
 	

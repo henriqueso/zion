@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import br.com.henriqueso.zion.exceptions.NoAvailablePositionException;
+import br.com.henriqueso.zion.exceptions.ThreatenedPieceException;
 import br.com.henriqueso.zion.piece.ChessPiece;
 
 public class ChessBoard {
@@ -31,26 +33,27 @@ public class ChessBoard {
 		}
 	}
 	
-	public void put(final ChessPiece piece, final Position position) {
+	public synchronized void put(final ChessPiece piece, final Position position) {
 		
-		if (position != null) {
+		if (position != null && available.contains(position)) {
 			piece.setPosition(position);
 			List<Position> threatens = piece.threatens(this);
 			
+			// TODO: Remove only after checking current positions
 			available.remove(position);
 			
 			checkCurrentPositions(threatens);
 
 			available.removeAll(threatens);
 			pieces.put(position, piece);
-			
 		} else {
-			throw new RuntimeException("There is no available positions");
+			throw new NoAvailablePositionException();
 		}
 	}
-	private void checkCurrentPositions(final List<Position> threatens) {
+	
+	private synchronized void checkCurrentPositions(final List<Position> threatens) {
 		if (!pieces.isEmpty() && !Collections.disjoint(threatens, pieces.keySet())) {
-			throw new RuntimeException("There are threatened positions");
+			throw new ThreatenedPieceException();
 		}
 	}
 
@@ -85,7 +88,7 @@ public class ChessBoard {
 				if (piece != null) {
 					sBuffer.append(" " + piece.toString() + " ");
 					
-				} else if(available.contains(position)) {
+				} else if (available.contains(position)) {
 					sBuffer.append(position);
 					
 				} else {
