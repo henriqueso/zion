@@ -6,6 +6,7 @@ import java.util.List;
 import br.com.henriqueso.zion.board.ChessBoard;
 import br.com.henriqueso.zion.board.Position;
 import br.com.henriqueso.zion.piece.ChessPiece;
+import br.com.henriqueso.zion.piece.ChessPieceComparator;
 import br.com.henriqueso.zion.piece.King;
 import br.com.henriqueso.zion.piece.Knight;
 
@@ -25,13 +26,7 @@ public class ChessApp {
 
 		Position position = new Position(0, 0);
 		
-		Collections.sort(pieces, new Comparator<ChessPiece>() {
-
-			@Override
-			public int compare(ChessPiece piece1, ChessPiece piece2) {
-				return piece2.getThreatLevel().compareTo(piece1.getThreatLevel());
-			}
-		});
+		Collections.sort(pieces, new ChessPieceComparator());
 		
 		app.addPieces(pieces, position, board);
 		
