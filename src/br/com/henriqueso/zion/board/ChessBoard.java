@@ -1,5 +1,6 @@
 package br.com.henriqueso.zion.board;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,8 +12,10 @@ import br.com.henriqueso.zion.exceptions.NoAvailablePositionException;
 import br.com.henriqueso.zion.exceptions.ThreatenedPieceException;
 import br.com.henriqueso.zion.piece.ChessPiece;
 
-public class ChessBoard {
+public class ChessBoard implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Set<Position> available;
 	private Map<Position, ChessPiece> pieces;
 	private int rows;
@@ -22,17 +25,11 @@ public class ChessBoard {
 		this.rows = rows;
 		this.columns = columns;
 		
-		available = new HashSet<>();
 		pieces = new HashMap<>();
 		
-		for (int row = 0; row < rows; row++) {
-			
-			for (int column = 0; column < columns; column++) {
-				available.add(new Position(row, column));
-			}
-		}
+		createAvailablePositions(rows, columns);
 	}
-	
+
 	public synchronized void put(final ChessPiece piece, final Position position) {
 		
 		if (position != null && available.contains(position)) {
@@ -54,6 +51,17 @@ public class ChessBoard {
 	private synchronized void checkCurrentPositions(final List<Position> threatens) {
 		if (!pieces.isEmpty() && !Collections.disjoint(threatens, pieces.keySet())) {
 			throw new ThreatenedPieceException();
+		}
+	}
+
+	private void createAvailablePositions(final int rows, final int columns) {
+		available = new HashSet<>();
+		
+		for (int row = 0; row < rows; row++) {
+			
+			for (int column = 0; column < columns; column++) {
+				available.add(new Position(row, column));
+			}
 		}
 	}
 
@@ -86,13 +94,13 @@ public class ChessBoard {
 				ChessPiece piece = pieces.get(position);
 				
 				if (piece != null) {
-					sBuffer.append(" " + piece.toString() + " ");
+					sBuffer.append(" " + piece.getName() + " ");
 					
 				} else if (available.contains(position)) {
-					sBuffer.append(position);
+					sBuffer.append("   ");
 					
 				} else {
-					sBuffer.append("   ");
+					sBuffer.append(" * ");
 				}
 				
 				sBuffer.append("|");
@@ -105,4 +113,5 @@ public class ChessBoard {
 	public Set<Position> getAvailablePositions() {
 		return Collections.unmodifiableSet(available);
 	}
+
 }
