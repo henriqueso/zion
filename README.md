@@ -8,4 +8,5 @@ The Matrix code
 To run the application:
 
 > mvn package
+
 > java -jar target/zion.jar 3x3 2K,1R
