@@ -1,7 +1,10 @@
 package br.com.henriqueso.app;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.lang3.SerializationUtils;
 
 import br.com.henriqueso.zion.board.ChessBoard;
 import br.com.henriqueso.zion.board.Position;
@@ -12,19 +15,9 @@ import br.com.henriqueso.zion.piece.ChessPieceComparator;
 import br.com.henriqueso.zion.piece.King;
 import br.com.henriqueso.zion.piece.Knight;
 
-public class ChessApp implements Runnable {
+public class ChessApp {
 
-	private List<ChessPiece> pieces;
-	private Position firstPosition;
-	private ChessBoard board;
-
-
-	public ChessApp(List<ChessPiece> pieces, Position position, ChessBoard board) {
-		this.pieces = pieces;
-		this.firstPosition = position;
-		this.board = board;
-	}
-
+	private int boardCount = 0;
 
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
@@ -32,44 +25,48 @@ public class ChessApp implements Runnable {
 		int rows = 3;
 		int columns = 3;
 		
-		for (int row = 0; row < rows; row++) {
-			
-			for (int column = 0; column < columns; column++) {
-				List<ChessPiece> pieces = Arrays.asList(new King(), new Knight(), new Knight());
+		List<ChessPiece> pieces = new ArrayList<>();
+		pieces.add(new King());
+		pieces.add(new Knight());
+		pieces.add(new Knight());
 				
-				Collections.sort(pieces, new ChessPieceComparator());
+		Collections.sort(pieces, new ChessPieceComparator());
 				
-				Position initialPosition = new Position(row, column);
-				ChessApp app = new ChessApp(pieces, initialPosition, new ChessBoard(rows, columns));
-
-				new Thread(app, initialPosition.toString()).start();
-			}
-		}
+		ChessApp app = new ChessApp();
+		app.addPieces(pieces, new ChessBoard(rows, columns));
 		
 		long end = System.currentTimeMillis();
 		System.out.println("Took " + (end - start) + " milliseconds.");
 	}
 	
-	
-	private void addPieces(List<ChessPiece> pieces, Position position, ChessBoard board) {
+	private void addPieces(List<ChessPiece> pieces, ChessBoard board) {
 		try {
-			Position piecePosition = position;
-			for (ChessPiece piece : pieces) {
-				addPiece(piece, piecePosition, board);
+			
+			if ( !pieces.isEmpty() ) {
+				ChessBoard chessBoard = null;
 				
-				if (board.getAvailablePositions().iterator().hasNext()) {
-					piecePosition = board.getAvailablePositions().iterator().next();
-				} else {
-					throw new NoAvailablePositionException();
+				Iterator<Position> iterator = board.getAvailablePositions().iterator();
+				while (iterator.hasNext()) {
+					Position next = iterator.next();
+					
+					chessBoard = SerializationUtils.clone(board);
+					
+					try {
+						
+						addPiece(pieces.get(0), next, chessBoard);
+						addPieces(pieces.subList(1, pieces.size()), chessBoard);
+						
+					} catch (NoAvailablePositionException | ThreatenedPieceException bex) {
+//							System.out.println(Thread.currentThread().getName() + " not possible");
+					}
+					
 				}
+				
+			} else {
+				System.out.println("-------------\n"  + ++boardCount);
+				System.out.println(board);
 			}
-			
-			System.out.println(Thread.currentThread().getName() + board);
-			System.out.println("-----------------");
 		
-		} catch (NoAvailablePositionException | ThreatenedPieceException bex) {
-//			System.out.println(Thread.currentThread().getName() + " not possible");
-			
 		} catch (RuntimeException rex) {
 			rex.printStackTrace();
 			
@@ -85,22 +82,15 @@ public class ChessApp implements Runnable {
 			
 		} catch (ThreatenedPieceException rex) {
 			
-			if ( board.getAvailablePositions().iterator().hasNext() ) {
-				Position next = board.getAvailablePositions().iterator().next();
-			
-				addPiece(piece, next, board);
-			} else {
+//			if ( board.getAvailablePositions().iterator().hasNext() ) {
+//				Position next = board.getAvailablePositions().iterator().next();
+//			
+//				addPiece(piece, next, board);
+//			} else {
 				throw rex;
-			}
+//			}
 		}
 		
-		
-	}
-
-
-	@Override
-	public void run() {
-		addPieces(pieces, firstPosition, board);
 		
 	}
 
