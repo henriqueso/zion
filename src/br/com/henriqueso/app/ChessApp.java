@@ -12,6 +12,7 @@ import br.com.henriqueso.zion.board.ChessBoard;
 import br.com.henriqueso.zion.board.Position;
 import br.com.henriqueso.zion.exceptions.NoAvailablePositionException;
 import br.com.henriqueso.zion.exceptions.ThreatenedPieceException;
+import br.com.henriqueso.zion.piece.Bishop;
 import br.com.henriqueso.zion.piece.ChessPiece;
 import br.com.henriqueso.zion.piece.ChessPieceComparator;
 import br.com.henriqueso.zion.piece.Knight;
@@ -30,10 +31,10 @@ public class ChessApp {
 		List<ChessPiece> pieces = new ArrayList<>();
 		pieces.add(new Knight());
 		pieces.add(new Knight());
-		pieces.add(new Knight());
-		pieces.add(new Knight());
 		pieces.add(new Rook());
 		pieces.add(new Rook());
+		pieces.add(new Bishop());
+		pieces.add(new Bishop());
 				
 		Collections.sort(pieces, new ChessPieceComparator());
 				
