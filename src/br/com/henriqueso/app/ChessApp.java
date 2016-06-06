@@ -1,8 +1,10 @@
 package br.com.henriqueso.app;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -13,11 +15,11 @@ import br.com.henriqueso.zion.exceptions.ThreatenedPieceException;
 import br.com.henriqueso.zion.piece.ChessPiece;
 import br.com.henriqueso.zion.piece.ChessPieceComparator;
 import br.com.henriqueso.zion.piece.King;
-import br.com.henriqueso.zion.piece.Knight;
+import br.com.henriqueso.zion.piece.Rook;
 
 public class ChessApp {
 
-	private int boardCount = 0;
+	private Set<ChessBoard> uniqueBoards = new HashSet<>();
 
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
@@ -27,8 +29,8 @@ public class ChessApp {
 		
 		List<ChessPiece> pieces = new ArrayList<>();
 		pieces.add(new King());
-		pieces.add(new Knight());
-		pieces.add(new Knight());
+		pieces.add(new King());
+		pieces.add(new Rook());
 				
 		Collections.sort(pieces, new ChessPieceComparator());
 				
@@ -63,13 +65,16 @@ public class ChessApp {
 				}
 				
 			} else {
-				System.out.println("-------------\n"  + ++boardCount);
-				System.out.println(board);
+				
+				if (!uniqueBoards.contains(board)) {
+					System.out.println(board);
+					
+					uniqueBoards.add(board);
+				}
 			}
 		
 		} catch (RuntimeException rex) {
 			rex.printStackTrace();
-			
 		}
 		
 	}

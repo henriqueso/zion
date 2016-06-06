@@ -96,11 +96,8 @@ public class ChessBoard implements Serializable {
 				if (piece != null) {
 					sBuffer.append(" " + piece.getName() + " ");
 					
-				} else if (available.contains(position)) {
-					sBuffer.append("   ");
-					
 				} else {
-					sBuffer.append(" * ");
+					sBuffer.append("   ");
 				}
 				
 				sBuffer.append("|");
@@ -108,6 +105,37 @@ public class ChessBoard implements Serializable {
 		}
 		
 		return sBuffer.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + columns;
+		result = prime * result + ((pieces == null) ? 0 : pieces.hashCode());
+		result = prime * result + rows;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ChessBoard other = (ChessBoard) obj;
+		if (columns != other.columns)
+			return false;
+		if (pieces == null) {
+			if (other.pieces != null)
+				return false;
+		} else if (!pieces.equals(other.pieces))
+			return false;
+		if (rows != other.rows)
+			return false;
+		return true;
 	}
 
 	public Set<Position> getAvailablePositions() {

@@ -7,6 +7,10 @@ import br.com.henriqueso.zion.board.Position;
 
 public class Bishop extends ChessPiece {
 
+	public Bishop() {
+		setName("B");
+	}
+	
 	@Override
 	public List<Position> threatens(ChessBoard chessBoard) {
 		// TODO: Implement how bishop attacks
@@ -14,12 +18,9 @@ public class Bishop extends ChessPiece {
 	}
 
 	@Override
-	public String getName() {
-		return "B";
-	}
-
-	@Override
 	public Integer getThreatLevel() {
 		return Integer.valueOf(4);
 	}
+
+	private static final long serialVersionUID = 1L;
 }

@@ -8,6 +8,10 @@ import br.com.henriqueso.zion.board.Position;
 
 public class Knight extends ChessPiece {
 
+	public Knight() {
+		setName("N");
+	}
+	
 	@Override
 	public List<Position> threatens(ChessBoard chessBoard) {
 		List<Position> threatened = new ArrayList<>();
@@ -90,8 +94,5 @@ public class Knight extends ChessPiece {
 		return new Position(threatenedX, threatenedY);
 	}
 
-	@Override
-	public String getName() {
-		return "N";
-	}
+	private static final long serialVersionUID = 1L;
 }
