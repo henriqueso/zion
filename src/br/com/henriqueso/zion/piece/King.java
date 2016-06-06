@@ -95,8 +95,7 @@ public class King extends ChessPiece {
 		}
 	}
 
-	@Override
-	public String toString() {
+	public String getName() {
 		return "K";
 	}
 }

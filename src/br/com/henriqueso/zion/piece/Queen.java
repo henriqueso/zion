@@ -14,7 +14,7 @@ public class Queen extends ChessPiece {
 	}
 
 	@Override
-	public String toString() {
+	public String getName() {
 		return "Q";
 	}
 

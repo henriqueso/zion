@@ -14,7 +14,7 @@ public class Bishop extends ChessPiece {
 	}
 
 	@Override
-	public String toString() {
+	public String getName() {
 		return "B";
 	}
 
