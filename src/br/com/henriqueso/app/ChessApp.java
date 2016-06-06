@@ -14,7 +14,7 @@ import br.com.henriqueso.zion.exceptions.NoAvailablePositionException;
 import br.com.henriqueso.zion.exceptions.ThreatenedPieceException;
 import br.com.henriqueso.zion.piece.ChessPiece;
 import br.com.henriqueso.zion.piece.ChessPieceComparator;
-import br.com.henriqueso.zion.piece.King;
+import br.com.henriqueso.zion.piece.Knight;
 import br.com.henriqueso.zion.piece.Rook;
 
 public class ChessApp {
@@ -24,12 +24,15 @@ public class ChessApp {
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
 		
-		int rows = 3;
-		int columns = 3;
+		int rows = 4;
+		int columns = 4;
 		
 		List<ChessPiece> pieces = new ArrayList<>();
-		pieces.add(new King());
-		pieces.add(new King());
+		pieces.add(new Knight());
+		pieces.add(new Knight());
+		pieces.add(new Knight());
+		pieces.add(new Knight());
+		pieces.add(new Rook());
 		pieces.add(new Rook());
 				
 		Collections.sort(pieces, new ChessPieceComparator());
@@ -86,14 +89,7 @@ public class ChessApp {
 			board.put(piece, position);
 			
 		} catch (ThreatenedPieceException rex) {
-			
-//			if ( board.getAvailablePositions().iterator().hasNext() ) {
-//				Position next = board.getAvailablePositions().iterator().next();
-//			
-//				addPiece(piece, next, board);
-//			} else {
-				throw rex;
-//			}
+			throw rex;
 		}
 		
 		
