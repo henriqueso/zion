@@ -25,6 +25,8 @@ public class ChessApp {
 	private static final int DIMENSION_PARAM = 0;
 	private static final int PIECES_PARAM = 1;
 	
+	private static long boardCount = 0;
+	
 	private Set<ChessBoard> uniqueBoards = new HashSet<>();
 
 	public static void main(String[] args) {
@@ -44,7 +46,7 @@ public class ChessApp {
 				app.addPieces(pieces, new ChessBoard(rows, columns));
 				
 				long end = System.currentTimeMillis();
-				System.out.println("Took " + (end - start) + " milliseconds.");
+				System.out.println(boardCount + " boards. Took " + (end - start) + " milliseconds.");
 			}
 			
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -124,9 +126,11 @@ public class ChessApp {
 			} else {
 				
 				if (!uniqueBoards.contains(board)) {
-					System.out.println(board);
+//					System.out.println(board);
 					
 					uniqueBoards.add(board);
+					
+					boardCount++;
 				}
 			}
 		
