@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,16 +31,14 @@ public class ChessBoard implements Serializable {
 		createAvailablePositions(rows, columns);
 	}
 
-	public synchronized void put(final ChessPiece piece, final Position position) {
+	public void put(final ChessPiece piece, final Position position) {
 		
 		if (position != null && available.contains(position)) {
-			piece.setPosition(position);
-			List<Position> threatens = piece.threatens(this);
-			
-			// TODO: Remove only after checking current positions
-			available.remove(position);
+			List<Position> threatens = piece.threatens(this, position);
 			
 			checkCurrentPositions(threatens);
+
+			available.remove(position);
 
 			available.removeAll(threatens);
 			pieces.put(position, piece);
@@ -48,10 +47,17 @@ public class ChessBoard implements Serializable {
 		}
 	}
 	
-	private synchronized void checkCurrentPositions(final List<Position> threatens) {
-		if (!pieces.isEmpty() && !Collections.disjoint(threatens, pieces.keySet())) {
-			throw new ThreatenedPieceException();
+	private void checkCurrentPositions(final List<Position> threatens) {
+		if (!pieces.isEmpty()) {
+			
+			Iterator<Position> iterator = pieces.keySet().iterator();
+			while (iterator.hasNext()) {
+				if (threatens.contains(iterator.next())) {
+					throw new ThreatenedPieceException();
+				}
+			}
 		}
+//		System.out.println("p:" + pieces.keySet() + "\nt:" + threatens);
 	}
 
 	private void createAvailablePositions(final int rows, final int columns) {
@@ -96,8 +102,10 @@ public class ChessBoard implements Serializable {
 				if (piece != null) {
 					sBuffer.append(" " + piece.getName() + " ");
 					
-				} else {
+				} else if (available.contains(position)) {
 					sBuffer.append("   ");
+				} else {
+					sBuffer.append(" * ");
 				}
 				
 				sBuffer.append("|");

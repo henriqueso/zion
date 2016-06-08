@@ -13,50 +13,13 @@ public class Knight extends ChessPiece {
 	}
 	
 	@Override
-	public List<Position> threatens(ChessBoard chessBoard) {
+	public List<Position> threatens(ChessBoard chessBoard, Position position) {
 		List<Position> threatened = new ArrayList<>();
 		
-		Position newPosition = null;
-		
-		newPosition = bottomRight(1, 2);
-		if (chessBoard.isValidPosition(newPosition)) {
-			threatened.add(newPosition);
-		}
-		
-		newPosition = bottomRight(2, 1);
-		if (chessBoard.isValidPosition(newPosition)) {
-			threatened.add(newPosition);
-		}
-		
-		newPosition = bottomLeft(1, 2);
-		if (chessBoard.isValidPosition(newPosition)) {
-			threatened.add(newPosition);
-		}
-		
-		newPosition = bottomLeft(2, 1);
-		if (chessBoard.isValidPosition(newPosition)) {
-			threatened.add(newPosition);
-		}
-		
-		newPosition = topRight(1, 2);
-		if (chessBoard.isValidPosition(newPosition)) {
-			threatened.add(newPosition);
-		}
-		
-		newPosition = topRight(2, 1);
-		if (chessBoard.isValidPosition(newPosition)) {
-			threatened.add(newPosition);
-		}
-		
-		newPosition = topLeft(1, 2);
-		if (chessBoard.isValidPosition(newPosition)) {
-			threatened.add(newPosition);
-		}
-		
-		newPosition = topLeft(2, 1);
-		if (chessBoard.isValidPosition(newPosition)) {
-			threatened.add(newPosition);
-		}
+		bottomRight(chessBoard, threatened, position);
+		bottomLeft(chessBoard, threatened, position);
+		topRight(chessBoard, threatened, position);
+		topLeft(chessBoard, threatened, position);
 
 		return threatened;
 	}
@@ -66,32 +29,24 @@ public class Knight extends ChessPiece {
 		return Integer.valueOf(2);
 	}
 
-	private Position bottomLeft(int down, int left) {
-		int threatenedX = getPosition().getX() + down;
-		int threatenedY = getPosition().getY() - left;
-
-		return new Position(threatenedX, threatenedY);
+	private void bottomLeft(ChessBoard chessBoard, List<Position> threatened, Position position) {
+		addPosition(chessBoard, threatened, position.getX() + 1, position.getY() - 2);
+		addPosition(chessBoard, threatened, position.getX() + 2, position.getY() - 1);
 	}
 
-	private Position bottomRight(int down, int right) {
-		int threatenedX = getPosition().getX() + down;
-		int threatenedY = getPosition().getY() + right;
-		
-		return new Position(threatenedX, threatenedY);
+	private void bottomRight(ChessBoard chessBoard, List<Position> threatened, Position position) {
+		addPosition(chessBoard, threatened, position.getX() + 1, position.getY() + 2);
+		addPosition(chessBoard, threatened, position.getX() + 2, position.getY() + 1);
 	}
 	
-	private Position topLeft(int up, int left) {
-		int threatenedX = getPosition().getX() - up;
-		int threatenedY = getPosition().getY() - left;
-		
-		return new Position(threatenedX, threatenedY);
+	private void topLeft(ChessBoard chessBoard, List<Position> threatened, Position position) {
+		addPosition(chessBoard, threatened, position.getX() - 1, position.getY() - 2);
+		addPosition(chessBoard, threatened, position.getX() - 2, position.getY() - 1);
 	}
 	
-	private Position topRight(int up, int right) {
-		int threatenedX = getPosition().getX() - up;
-		int threatenedY = getPosition().getY() + right;
-		
-		return new Position(threatenedX, threatenedY);
+	private void topRight(ChessBoard chessBoard, List<Position> threatened, Position position) {
+		addPosition(chessBoard, threatened, position.getX() - 1, position.getY() + 2);
+		addPosition(chessBoard, threatened, position.getX() - 2, position.getY() + 1);
 	}
 
 	private static final long serialVersionUID = 1L;

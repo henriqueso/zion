@@ -10,17 +10,8 @@ public abstract class ChessPiece implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Position position;
 	private String name;
 
-	Position getPosition() {
-		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -29,20 +20,128 @@ public abstract class ChessPiece implements Serializable {
 		this.name = name;
 	}
 	
+	void southEast(final ChessBoard chessBoard, final List<Position> threatened, final Position position, final boolean isSlider) {
+		int threatenedX = position.getX() + 1;
+		int threatenedY = position.getY() + 1;
+		
+		if (isSlider) {
+			for (; threatenedY < chessBoard.getColumns() && threatenedX < chessBoard.getRows(); threatenedX++, threatenedY++) {
+				addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+			}
+		} else {
+			addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+		}
+	}
+
+	void southWest(final ChessBoard chessBoard, final List<Position> threatened, final Position position, final boolean isSlider) {
+		int threatenedX = position.getX() + 1;
+		int threatenedY = position.getY() - 1;
+		
+		if (isSlider) {
+			for (; threatenedY >= 0 && threatenedX < chessBoard.getRows(); threatenedY--, threatenedX++) {
+				addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+			}
+		} else {
+			addPosition(chessBoard, threatened, threatenedX, threatenedY);
+		}
+	}
+
+	void northWest(final ChessBoard chessBoard, final List<Position> threatened, final Position position, final boolean isSlider) {
+		int threatenedX = position.getX() - 1;
+		int threatenedY = position.getY() - 1;
+		
+		if (isSlider) {
+			for (; threatenedY >= 0 && threatenedX >= 0; threatenedY--, threatenedX--) {
+				addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+			}
+		} else {
+			addPosition(chessBoard, threatened, threatenedX, threatenedY);
+		}
+	}
+
+	void northEast(final ChessBoard chessBoard, final List<Position> threatened, final Position position, final boolean isSlider) {
+		int threatenedX = position.getX() - 1;
+		int threatenedY = position.getY() + 1;
+		
+		if (isSlider) {
+			for (; threatenedX >= 0 && threatenedY < chessBoard.getColumns(); threatenedY++, threatenedX--) {
+				addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+			}
+		} else {
+			addPosition(chessBoard, threatened, threatenedX, threatenedY);
+		}
+	}
+
+	void north(final ChessBoard chessBoard, final List<Position> threatened, final Position position, final boolean isSlider) {
+		int threatenedX = position.getX() - 1;
+		int threatenedY = position.getY();
+	
+		if (isSlider) {
+			for (; threatenedX >= 0; threatenedX--) {
+				addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+			}
+		} else {
+			addPosition(chessBoard, threatened, threatenedX, threatenedY);
+		}
+	}
+
+	void east(final ChessBoard chessBoard, final List<Position> threatened, final Position position, final boolean isSlider) {
+		int threatenedX = position.getX();
+		int threatenedY = position.getY() + 1;
+		
+		if (isSlider) {
+			for (; threatenedY < chessBoard.getColumns(); threatenedY++) {
+				addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+			}
+		} else {
+			addPosition(chessBoard, threatened, threatenedX, threatenedY);
+		}
+	}
+
+	void south(final ChessBoard chessBoard, final List<Position> threatened, final Position position, final boolean isSlider) {
+		int threatenedX = position.getX() + 1;
+		int threatenedY = position.getY();
+		
+		if (isSlider) {
+			for (; threatenedX < chessBoard.getRows(); threatenedX++) {
+				addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+			}
+		} else {
+			addPosition(chessBoard, threatened, threatenedX, threatenedY);
+		}
+	}
+
+	void west(final ChessBoard chessBoard, final List<Position> threatened, final Position position, final boolean isSlider) {
+		int threatenedX = position.getX();
+		int threatenedY = position.getY() - 1;
+		
+		if (isSlider) {
+			for (; threatenedY >= 0; threatenedY--) {
+				addPosition(chessBoard, threatened, threatenedX, threatenedY);	
+			}
+		} else {
+			addPosition(chessBoard, threatened, threatenedX, threatenedY);
+		}
+	}
+	
+	void addPosition(ChessBoard chessBoard, List<Position> threatened, int threatenedX, int threatenedY) {
+		Position position = new Position(threatenedX, threatenedY);
+		
+		if (chessBoard.isValidPosition(position)){
+			threatened.add(position);
+		}
+	}
+	
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		
 		sb.append(getName());
 		
-		if (position != null) {
-			sb.append(" on ").append(position);
-		}
-		
 		return sb.toString();
 	}
 	
-	public abstract List<Position> threatens(ChessBoard chessBoard);
+	public abstract List<Position> threatens(ChessBoard chessBoard, Position position);
 	public abstract Integer getThreatLevel();
 
 	@Override

@@ -12,22 +12,17 @@ import br.com.henriqueso.zion.board.ChessBoard;
 import br.com.henriqueso.zion.board.Position;
 import br.com.henriqueso.zion.exceptions.NoAvailablePositionException;
 import br.com.henriqueso.zion.exceptions.ThreatenedPieceException;
-import br.com.henriqueso.zion.piece.Bishop;
 import br.com.henriqueso.zion.piece.ChessPiece;
 import br.com.henriqueso.zion.piece.ChessPieceComparator;
-import br.com.henriqueso.zion.piece.King;
-import br.com.henriqueso.zion.piece.Knight;
-import br.com.henriqueso.zion.piece.Queen;
-import br.com.henriqueso.zion.piece.Rook;
 
 public class ChessApp {
-
+	
 	private static final int DIMENSION_PARAM = 0;
 	private static final int PIECES_PARAM = 1;
 	
 	private static long boardCount = 0;
-	
-	private Set<ChessBoard> uniqueBoards = new HashSet<>();
+
+	private static Set<ChessBoard> uniqueBoards = new HashSet<>();
 
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
@@ -50,10 +45,73 @@ public class ChessApp {
 			}
 			
 		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 				
+	}
+
+	private void addPieces(List<ChessPiece> pieces, ChessBoard board) {
+		try {
+			
+			if ( !pieces.isEmpty() ) {
+				ChessBoard chessBoard = null;
+				Position next = null;
+				
+				Iterator<Position> iterator = board.getAvailablePositions().iterator();
+				
+				boolean found = false;
+				while (iterator.hasNext() && !found) {
+					
+					
+					next = iterator.next();
+					
+					chessBoard = SerializationUtils.clone(board);
+					
+					try {
+						
+						addPiece(pieces.get(0), next, chessBoard);
+						
+						if (pieces.size() > 1) {
+							addPieces(pieces.subList(1, pieces.size()), chessBoard);
+						} else {
+							
+							addIfNotExist(chessBoard);
+														
+							found = true;
+						}
+					} catch (NoAvailablePositionException | ThreatenedPieceException bex) {
+//						System.out.println(Thread.currentThread().getName() + " not possible");
+					}
+				}
+				
+			}
+		} catch (RuntimeException rex) {
+			rex.printStackTrace();
+		}
+		
+	}
+
+	private void addIfNotExist(ChessBoard chessBoard) {
+		if (!uniqueBoards.contains(chessBoard)) {
+			uniqueBoards.add(chessBoard);
+			
+			boardCount++;
+
+//			System.out.println(Thread.currentThread().getName() + "\n" + chessBoard);
+		}
+
+	}
+
+	private void addPiece(ChessPiece piece, Position position, ChessBoard board) {
+		try {
+
+			board.put(piece, position);
+			
+		} catch (ThreatenedPieceException rex) {
+			throw rex;
+		}
+		
+		
 	}
 	
 	private static List<ChessPiece> getPieces(String[] args) throws InstantiationException, IllegalAccessException {
@@ -98,59 +156,6 @@ public class ChessApp {
 		}
 
 		return columns;
-	}
-
-	private void addPieces(List<ChessPiece> pieces, ChessBoard board) {
-		try {
-			
-			if ( !pieces.isEmpty() ) {
-				ChessBoard chessBoard = null;
-				
-				Iterator<Position> iterator = board.getAvailablePositions().iterator();
-				while (iterator.hasNext()) {
-					Position next = iterator.next();
-					
-					chessBoard = SerializationUtils.clone(board);
-					
-					try {
-						
-						addPiece(pieces.get(0), next, chessBoard);
-						addPieces(pieces.subList(1, pieces.size()), chessBoard);
-						
-					} catch (NoAvailablePositionException | ThreatenedPieceException bex) {
-//							System.out.println(Thread.currentThread().getName() + " not possible");
-					}
-					
-				}
-				
-			} else {
-				
-				if (!uniqueBoards.contains(board)) {
-//					System.out.println(board);
-					
-					uniqueBoards.add(board);
-					
-					boardCount++;
-				}
-			}
-		
-		} catch (RuntimeException rex) {
-			rex.printStackTrace();
-		}
-		
-	}
-
-
-	private void addPiece(ChessPiece piece, Position position, ChessBoard board) {
-		try {
-
-			board.put(piece, position);
-			
-		} catch (ThreatenedPieceException rex) {
-			throw rex;
-		}
-		
-		
 	}
 
 }

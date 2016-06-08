@@ -19,12 +19,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(0, 0));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(0, 0));
 		
 		/**
 		 *  THEN it should return positions 0,1 
@@ -51,12 +50,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(0, 1));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(0, 1));
 		
 		/**
 		 *  THEN it should return positions 0,2 
@@ -83,12 +81,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(0, 2));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(0, 2));
 		
 		/**
 		 *  THEN it should return positions 1,2 
@@ -115,12 +112,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(1, 0));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(1, 0));
 		
 		/**
 		 *  THEN it should return positions 0,0
@@ -147,12 +143,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(1, 1));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(1, 1));
 		
 		/**
 		 *  THEN it should return positions 0,1 
@@ -183,12 +178,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(1, 2));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(1, 2));
 		
 		/**
 		 *  THEN it should return positions 0,2
@@ -215,12 +209,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(2, 0));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(2, 0));
 		
 		/**
 		 *  THEN it should return positions 1,0
@@ -247,12 +240,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(2, 1));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(2, 1));
 		
 		/**
 		 *  THEN it should return positions 1,1
@@ -279,12 +271,11 @@ public class QueenTest {
 		 */
 		ChessBoard chessBoard = new ChessBoard(3,3);
 		ChessPiece piece = new Queen();
-		piece.setPosition(new Position(2, 2));
 		
 		/**
 		 *  WHEN getting the threatened positions
 		 */
-		List<Position> threatened = piece.threatens(chessBoard);
+		List<Position> threatened = piece.threatens(chessBoard, new Position(2, 2));
 		
 		/**
 		 *  THEN it should return positions 1,2
