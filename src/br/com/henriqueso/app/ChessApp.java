@@ -37,8 +37,14 @@ public class ChessApp {
 			if (pieces != null) {
 				Collections.sort(pieces, new ChessPieceComparator());
 				
+				
 				ChessApp app = new ChessApp();
-				app.addPieces(pieces, new ChessBoard(rows, columns));
+				
+				for (int row = 0; row < rows; row++) {
+					for (int column = 0; column < columns; column++) {
+						app.addPieces(pieces, new Position(row, column), new ChessBoard(rows, columns));
+					}
+				}
 				
 				long end = System.currentTimeMillis();
 				System.out.println(boardCount + " boards. Took " + (end - start) + " milliseconds.");
@@ -50,41 +56,32 @@ public class ChessApp {
 				
 	}
 
-	private void addPieces(List<ChessPiece> pieces, ChessBoard board) {
+	private void addPieces(List<ChessPiece> pieces, Position position, ChessBoard board) {
 		try {
-			
 			if ( !pieces.isEmpty() ) {
 				ChessBoard chessBoard = null;
 				Position next = null;
 				
-				Iterator<Position> iterator = board.getAvailablePositions().iterator();
+				addPiece(pieces.get(0), position, board);
 				
-				boolean found = false;
-				while (iterator.hasNext() && !found) {
+				if (pieces.size() > 1) {
 					
-					
-					next = iterator.next();
-					
-					chessBoard = SerializationUtils.clone(board);
-					
-					try {
+					Iterator<Position> iterator = board.getAvailablePositions().iterator();
+				
+					while (iterator.hasNext()) {
 						
-						addPiece(pieces.get(0), next, chessBoard);
+						next = iterator.next();
 						
-						if (pieces.size() > 1) {
-							addPieces(pieces.subList(1, pieces.size()), chessBoard);
-						} else {
+						chessBoard = SerializationUtils.clone(board);
 							
-							addIfNotExist(chessBoard);
-														
-							found = true;
-						}
-					} catch (NoAvailablePositionException | ThreatenedPieceException bex) {
-//						System.out.println(Thread.currentThread().getName() + " not possible");
+						addPieces(pieces.subList(1, pieces.size()), next, chessBoard);
 					}
-				}
-				
+				} else {
+					addIfNotExist(board);
+				}					
 			}
+		} catch (NoAvailablePositionException | ThreatenedPieceException bex) {
+//			System.out.println(Thread.currentThread().getName() + " not possible");
 		} catch (RuntimeException rex) {
 			rex.printStackTrace();
 		}
@@ -97,7 +94,7 @@ public class ChessApp {
 			
 			boardCount++;
 
-//			System.out.println(Thread.currentThread().getName() + "\n" + chessBoard);
+//			System.out.println("\n" + chessBoard);
 		}
 
 	}
